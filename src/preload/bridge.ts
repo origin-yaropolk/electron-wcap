@@ -1,11 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { BRIDGE_INVOKE_REQUEST_CHANEL, CallackInvokeRequest } from "./protocol";
-
-export const CALLBACK_BRIDGE_NAME = 'ElectronWCAPBridge';
-
-export interface CallbackBridge {
-	invoke(callbackName: string, ...args: unknown[]): unknown;
-}
+import { BRIDGE_INVOKE_REQUEST_CHANEL, CallackInvokeRequest, CALLBACK_BRIDGE_NAME } from "../common/protocol";
 
 export function enableCallbacks(): void {
 	contextBridge.exposeInMainWorld(CALLBACK_BRIDGE_NAME, {

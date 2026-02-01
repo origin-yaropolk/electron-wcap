@@ -1,4 +1,4 @@
-import { DispachedCallback } from "./protocol";
+import { DispachedCallback } from "../common/protocol";
 
 export function invoke(apiKey: string, method: string, args: unknown[]): unknown {
 	function isDispachedCallback(o: unknown): o is DispachedCallback {

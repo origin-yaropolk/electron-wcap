@@ -1,5 +1,5 @@
 import { ipcMain, WebContents } from "electron";
-import { BRIDGE_INVOKE_REQUEST_CHANEL, isCallackInvokeRequest } from "./protocol";
+import { BRIDGE_INVOKE_REQUEST_CHANEL, isCallackInvokeRequest } from "../common/protocol";
 
 export class CallbackRegistry {
 	private readonly callbacks = new Map<number, Map<string, (...args: unknown[]) => unknown>>();

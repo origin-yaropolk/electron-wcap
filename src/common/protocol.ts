@@ -16,3 +16,5 @@ export function isCallackInvokeRequest(msg: object): msg is CallackInvokeRequest
 }
 
 export const BRIDGE_INVOKE_REQUEST_CHANEL = 'api-provider:bridge-request';
+
+export const CALLBACK_BRIDGE_NAME = 'ElectronWCAPBridge';

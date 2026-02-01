@@ -1,7 +1,7 @@
 import { WebContents } from "electron";
 
 import { CallbackRegistry, globalCallbacksRegistry } from "./callback-registry";
-import { DispachedCallback } from "./protocol";
+import { DispachedCallback } from "../common/protocol";
 import { apiExists, invoke } from "./injectable";
 import { Promisify } from "promisify-ts"
 
@@ -10,7 +10,7 @@ export type WebContentsApiProvider<T> = Promisify<T> & { readonly webContents: W
 class ApiProviderPropertiesHandler {
 	constructor(readonly webContents: WebContents, readonly apiKey: string, private readonly callbackRegistry: CallbackRegistry){}
 
-	convertToInjectable<P extends unknown[], R extends unknown>(fn: (...args: P) => R, ...args: P): string {
+	compile<P extends unknown[], R extends unknown>(fn: (...args: P) => R, ...args: P): string {
 		return `(${fn.toString()})(${this.serializeArguments(...args)})`;
 	};
 
@@ -60,7 +60,7 @@ class ApiProviderProxyHandler {
 					throw new Error(`ApiProvider: Api with key '${this_.apiKey}' does not exists in host with id '${this_.webContents.id}'`);
 				}
 
-				const injectable = this_.convertToInjectable(invoke, this_.apiKey, propertyKey, args);
+				const injectable = this_.compile(invoke, this_.apiKey, propertyKey, args);
 			
 				return this_.webContents.executeJavaScript(injectable);
 			},
@@ -75,7 +75,7 @@ class ApiProviderProxyHandler {
 export function createApiProvider<ApiInterface>(webContents: WebContents, apiKey: string): WebContentsApiProvider<ApiInterface> {
 	const propertiesHandler = new ApiProviderPropertiesHandler(webContents, apiKey, globalCallbacksRegistry());
 
-	const checkApiExistsInjectable = propertiesHandler.convertToInjectable(apiExists, apiKey);
+	const checkApiExistsInjectable = propertiesHandler.compile(apiExists, apiKey);
 	const checkApiExistsPromise = webContents.executeJavaScript(checkApiExistsInjectable);
 
 	const proxyHandler = new ApiProviderProxyHandler(checkApiExistsPromise);

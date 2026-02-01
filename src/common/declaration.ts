@@ -1,4 +1,4 @@
-import { CallbackBridge } from "./bridge";
+import { CallbackBridge } from "./interfaces";
 
 declare global {
 	interface Window {

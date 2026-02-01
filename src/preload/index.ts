@@ -1,1 +1,1 @@
-export { enableCallbacks } from '../bridge';
+export { enableCallbacks } from './bridge';
