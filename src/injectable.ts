@@ -6,7 +6,7 @@ export function invoke(apiKey: string, method: string, args: unknown[]): unknown
 	}
 
 	function checkBridgeExists(): void {
-		if (window.ApiProviderBridge === null && window.ApiProviderBridge === undefined) {
+		if (window.ElectronWCAPBridge === null && window.ElectronWCAPBridge === undefined) {
 			throw new Error('ApiProvider: ApiProviderBridge does not exists. Make sure you have expose it via preload');
 		}
 	}
@@ -17,7 +17,7 @@ export function invoke(apiKey: string, method: string, args: unknown[]): unknown
 
 			const name = arg.dispatchedCallbackName;
 			args[index] = (...args: unknown[]) => {
-				return window.ApiProviderBridge.invoke(name, args);
+				return window.ElectronWCAPBridge.invoke(name, args);
 			}
 		}
 	})

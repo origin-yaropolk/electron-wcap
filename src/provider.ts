@@ -1,9 +1,9 @@
 import { WebContents } from "electron";
 
-import { Promisify } from "./promisify";
 import { CallbackRegistry, globalCallbacksRegistry } from "./callback-registry";
 import { DispachedCallback } from "./protocol";
 import { apiExists, invoke } from "./injectable";
+import { Promisify } from "promisify-ts"
 
 export type WebContentsApiProvider<T> = Promisify<T> & { readonly webContents: WebContents };
 
