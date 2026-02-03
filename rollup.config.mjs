@@ -10,57 +10,58 @@ const peerDependencies = Object.keys(pkgJson.peerDependencies || {});
 const external = [...builtinModules, /^node:/, 'electron', ...dependencies, ...peerDependencies];
 
 const outputOptions = {
-  sourcemap: true,
-  strict: false,
-  freeze: false,
-  externalLiveBindings: false,
-  generatedCode: {
-    preset: 'es2015',
-    symbols: false,
-  },
+	sourcemap: true,
+	strict: false,
+	freeze: false,
+	externalLiveBindings: false,
+	generatedCode: {
+		preset: 'es2015',
+		symbols: false,
+	},
 };
 
 // a simple plugin that adds a package.json file with type: module
 const modulePackageJson = {
-  name: 'package-json-module-type',
-  generateBundle() {
-    this.emitFile({
-      type: 'asset',
-      fileName: 'package.json',
-      source: '{"type": "module"}',
-    });
-  },
+name: 'package-json-module-type',
+	generateBundle() {
+		this.emitFile({
+			type: 'asset',
+			fileName: 'package.json',
+			source: '{"type": "module"}',
+		});
+	},
 };
 
 function transpileFiles(format, input, outDir) {
-  return {
-    input,
-    output: {
-      ...outputOptions,
-      format,
-      dir: outDir,
-      preserveModules: true,
-    },
-    treeshake: { moduleSideEffects: false },
-    plugins: [
-      typescript({
-        tsconfig: './src/tsconfig.json',
-        noEmitOnError: true,
-        include: ['src/**/*.ts'],
-        compilerOptions: { outDir },
-      }),
-      format === 'esm' ? modulePackageJson : {},
-    ],
-    external,
-  };
+	return {
+		input,
+		output: {
+			...outputOptions,
+			format,
+			dir: outDir,
+			preserveModules: true,
+		},
+		treeshake: { moduleSideEffects: false },
+		plugins: [
+			typescript({
+				tsconfig: './src/tsconfig.json',
+				noEmitOnError: true,
+				include: ['src/**/*.ts'],
+				compilerOptions: { outDir },
+			}),
+			format === 'esm' ? modulePackageJson : {},
+		],
+		external,
+	};
 }
 
 const entryPoints = [
-  'src/main/index.ts',
-  'src/preload/index.ts',
+	'src/index.ts',
+	'src/main/index.ts',
+	'src/preload/index.ts',
 ];
 
 export default [
-  transpileFiles('cjs', entryPoints, './dist'),
-  transpileFiles('esm', entryPoints, './dist/esm'),
+	transpileFiles('cjs', entryPoints, './dist'),
+	transpileFiles('esm', entryPoints, './dist/esm'),
 ];
