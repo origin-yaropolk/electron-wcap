@@ -4,7 +4,7 @@
 	],
 	"compilerOptions": {
 		"declaration": true,
-    	"declarationMap": true,
+		"declarationMap": true,
 		"composite": false,
 		"noUncheckedIndexedAccess": false,
 		"noUnusedLocals": false,

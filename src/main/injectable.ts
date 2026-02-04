@@ -1,4 +1,4 @@
-import { DispachedCallback } from "../common/protocol";
+import { DispachedCallback } from '../common/protocol';
 
 export function invoke(apiKey: string, method: string, args: unknown[]): unknown {
 	function isDispachedCallback(o: unknown): o is DispachedCallback {
@@ -6,23 +6,25 @@ export function invoke(apiKey: string, method: string, args: unknown[]): unknown
 	}
 
 	function checkBridgeExists(): void {
-		if (window.ElectronWCAPBridge === null && window.ElectronWCAPBridge === undefined) {
+		if (window.__ElectronWCAPBridge__ === null && window.__ElectronWCAPBridge__ === undefined) {
 			throw new Error('ApiProvider: ApiProviderBridge does not exists. Make sure you have expose it via preload');
 		}
 	}
 
-	args.map((arg, index) => {
+	function handleDispatchedCallback(arg: unknown, index: number): void {
 		if (isDispachedCallback(arg)) {
 			checkBridgeExists();
 
 			const name = arg.dispatchedCallbackName;
-			args[index] = (...args: unknown[]) => {
-				return window.ElectronWCAPBridge.invoke(name, args);
-			}
+			args[index] = (...cbArgs: unknown[]) => {
+				return window.__ElectronWCAPBridge__.invoke(name, cbArgs);
+			};
 		}
-	})
+	}
 
-	const api = window[apiKey];
+	args.map(handleDispatchedCallback);
+
+	const api = window[apiKey] as { [key: string]: (...args: unknown[]) => unknown };
 	return api[method](...args);
 }
 

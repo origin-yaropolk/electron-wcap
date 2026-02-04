@@ -1,8 +1,9 @@
-import { CallbackBridge } from "./interfaces";
+import { CallbackBridge } from './interfaces';
 
 declare global {
 	interface Window {
 		[key: string]: any;
-		ElectronWCAPBridge: CallbackBridge;
+		// eslint-disable-next-line @typescript-eslint/naming-convention
+		__ElectronWCAPBridge__: CallbackBridge;
 	}
 }

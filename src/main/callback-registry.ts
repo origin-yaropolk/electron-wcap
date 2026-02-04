@@ -1,20 +1,21 @@
-import { ipcMain, WebContents } from "electron";
-import { BRIDGE_INVOKE_REQUEST_CHANEL, isCallackInvokeRequest } from "../common/protocol";
+import { ipcMain, WebContents } from 'electron';
+
+import { BRIDGE_INVOKE_REQUEST_CHANEL, isCallackInvokeRequest } from '../common/protocol';
 
 export class CallbackRegistry {
 	private readonly callbacks = new Map<number, Map<string, (...args: unknown[]) => unknown>>();
 
 	constructor() {
-		ipcMain.on(BRIDGE_INVOKE_REQUEST_CHANEL, (event: Electron.IpcMainEvent, msg) => {
+		ipcMain.on(BRIDGE_INVOKE_REQUEST_CHANEL, (event: Electron.IpcMainEvent, msg: unknown) => {
 			if (isCallackInvokeRequest(msg)) {
 				const callback = this.callbacks.get(event.sender.id)?.get(msg.method);
 
 				if (!callback) {
-					console.error(`CallbackRegistry: callback '${msg.method}' is not registered in host '${event.sender.id}'`);
+					console.error(`CallbackRegistry: callback '${ msg.method }' is not registered in host '${ event.sender.id }'`);
 					return;
 				}
 
-				event.returnValue = callback?.call(null, ...msg.args);
+				event.returnValue = callback?.(...msg.args);
 				return;
 			}
 
@@ -28,29 +29,29 @@ export class CallbackRegistry {
 		}
 
 		let callbacksByIdBucket = this.callbacks.get(webContents.id);
-        if (!callbacksByIdBucket) {
+		if (!callbacksByIdBucket) {
 			callbacksByIdBucket = new Map<string, (...args: unknown[]) => unknown>();
 			this.callbacks.set(webContents.id, callbacksByIdBucket);
 			this.watchForHost(webContents);
-        }
+		}
 
 		if (callbacksByIdBucket.has(callback.name)) {
-			throw new Error(`CallbackRegistry: callback with name '${callback.name}', already registered in host with id '${webContents.id}'`);
+			throw new Error(`CallbackRegistry: callback with name '${ callback.name }', already registered in host with id '${ webContents.id }'`);
 		}
 
 		callbacksByIdBucket.set(callback.name, callback);
 		return callback.name;
 	}
 
-    unregisterCallback(hostId: number, name: string): boolean {
+	unregisterCallback(hostId: number, name: string): boolean {
 		const callbacksByIdBucket = this.callbacks.get(hostId);
 
 		if (!callbacksByIdBucket) {
 			return false;
 		}
 
-        return callbacksByIdBucket.delete(name);
-    }
+		return callbacksByIdBucket.delete(name);
+	}
 
 	private watchForHost(webContents: WebContents): void {
 		webContents.once('destroyed', () => {
@@ -62,9 +63,9 @@ export class CallbackRegistry {
 let registryInstance: CallbackRegistry | null = null;
 
 export function globalCallbacksRegistry(): CallbackRegistry {
-    if (!registryInstance) {
-        registryInstance = new CallbackRegistry();
-    }
+	if (!registryInstance) {
+		registryInstance = new CallbackRegistry();
+	}
 
-    return registryInstance;
-} 
+	return registryInstance;
+}

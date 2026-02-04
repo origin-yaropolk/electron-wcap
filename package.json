@@ -1,7 +1,7 @@
 {
 	"name": "electron-wcap",
 	"version": "0.0.0",
-	"description": "Electron webcontent api provider",
+	"description": "Electron WebContent API Provider — call renderer APIs from the main process with support for passing callbacks.",
 	"scripts": {
 		"lint": "pnpm lint:ec && pnpm lint:eslint",
 		"lint:ec": "ec",
@@ -15,6 +15,7 @@
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.3.3",
+		"@eslint/js": "^9.39.2",
 		"@rollup/plugin-typescript": "^12.3.0",
 		"@tsconfig/node22": "^22.0.5",
 		"@types/jest": "^30.0.0",
@@ -27,6 +28,7 @@
 		"eslint-config-standard": "^17.1.0",
 		"eslint-plugin-import": "^2.32.0",
 		"eslint-plugin-simple-import-sort": "^12.1.1",
+		"globals": "^17.3.0",
 		"jest": "^30.2.0",
 		"promisify-ts": "^1.0.1",
 		"rollup": "^4.57.1",
