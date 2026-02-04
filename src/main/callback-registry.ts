@@ -1,13 +1,13 @@
 import { ipcMain, WebContents } from 'electron';
 
-import { BRIDGE_INVOKE_REQUEST_CHANEL, isCallackInvokeRequest } from '../common/protocol';
+import { BRIDGE_INVOKE_REQUEST_CHANNEL, isCallbackInvokeRequest } from '../common/protocol';
 
 export class CallbackRegistry {
 	private readonly callbacks = new Map<number, Map<string, (...args: unknown[]) => unknown>>();
 
 	constructor() {
-		ipcMain.on(BRIDGE_INVOKE_REQUEST_CHANEL, (event: Electron.IpcMainEvent, msg: unknown) => {
-			if (isCallackInvokeRequest(msg)) {
+		ipcMain.on(BRIDGE_INVOKE_REQUEST_CHANNEL, (event: Electron.IpcMainEvent, msg: unknown) => {
+			if (isCallbackInvokeRequest(msg)) {
 				const callback = this.callbacks.get(event.sender.id)?.get(msg.method);
 
 				if (!callback) {

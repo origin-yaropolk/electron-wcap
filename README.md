@@ -89,6 +89,7 @@ The renderer can call the callback (possibly asynchronously); the call is sent t
 
 - **Entry points**: Use `electron-wcap/main` in the main process and `electron-wcap/preload` in the preload script. Importing from `electron-wcap` alone throws an error that explains this.
 - **Callback names**: Callbacks you pass from main must be named (e.g. `function onData(x) { ... }`), not anonymous, so they can be registered and invoked by name.
+- **sandbox**: as Electron now deafult sandbox to `true`, you should disable sandoxing to use callbacks.
 
 ## Build
 

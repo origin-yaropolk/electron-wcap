@@ -1,7 +1,7 @@
 import { WebContents } from 'electron';
 import { Promisify } from 'promisify-ts';
 
-import { DispachedCallback } from '../common/protocol';
+import { DispatchedCallback } from '../common/protocol';
 import { CallbackRegistry, globalCallbacksRegistry } from './callback-registry';
 import { apiExists, invoke } from './injectable';
 
@@ -19,7 +19,7 @@ class ApiProviderPropertiesHandler {
 			if (Array.isArray(arg)) {
 				arg.forEach((value: unknown[], index) => {
 					if (typeof value === 'function') {
-						const dispatched: DispachedCallback = {
+						const dispatched: DispatchedCallback = {
 							dispatchedCallbackName: this.callbackRegistry.registerCallback(this.webContents, value)
 						};
 
