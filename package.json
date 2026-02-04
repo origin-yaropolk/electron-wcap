@@ -2,6 +2,14 @@
 	"name": "electron-wcap",
 	"version": "0.0.0",
 	"description": "Electron WebContent API Provider — call renderer APIs from the main process with support for passing callbacks.",
+	"author": "Egor Kushnarev",
+	"homepage": "https://github.com/origin-yaropolk/electron-wcap",
+	"repository": {
+			"type": "git",
+			"url": "https://github.com/origin-yaropolk/electron-wcap"
+		},
+	"license": "MIT",
+	"keywords": ["electron", "webcontent", "executeJavaScript", "renderer", "API"],
 	"scripts": {
 		"lint": "pnpm lint:ec && pnpm lint:eslint",
 		"lint:ec": "ec",
@@ -12,6 +20,30 @@
 	"volta": {
 		"node": "22.22.0",
 		"pnpm": "10.28.2"
+	},
+	"module": "./esm/main/index.js",
+	"browser": "./esm/renderer/index.js",
+	"exports": {
+		"./main": {
+			"require": {
+				"types": "./main/index.d.ts",
+				"default": "./main/index.js"
+			},
+			"import": {
+				"types": "./esm/main/index.d.ts",
+				"default": "./esm/main/index.js"
+			}
+		},
+		"./preload": {
+			"require": {
+				"types": "./preload/index.d.ts",
+				"default": "./preload/index.js"
+			},
+			"import": {
+				"types": "./esm/preload/index.d.ts",
+				"default": "./esm/preload/index.js"
+			}
+		}
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.3.3",

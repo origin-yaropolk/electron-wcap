@@ -1,11 +1,16 @@
 
-import { readFileSync, writeFileSync, copyFileSync } from 'fs';
+import { writeFileSync, copyFileSync } from 'fs';
 import { join } from 'path';
 
 import { exit } from 'process';
 
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs';
+
+import packageJson from '../package.json' with {type: "json"}
+
+// const packageJson = pJson;
+
 
 function getArgs() {
 	const argv = yargs(hideBin(process.argv))
@@ -18,46 +23,26 @@ function getArgs() {
 	return argv;
 }
 
+
 function generatePackage() {
-	const packageMetadata = (version, dependencies) => ({
-		name: 'electron-wcap',
+	const packageMetadata = (version) => ({
+		name: packageJson.name,
 		version,
-		author: 'Egor Kushnarev',
-		description: 'TODO',
-		license: 'MIT',
-		keywords: ['todo'],
-		repository: {
-			type: 'git',
-			url: 'https://github.com/origin-yaropolk/reactive-state',
-		},
-		exports: {
-			"./main": {
-				"require": {
-					"types": "./main/index.d.ts",
-					"default": "./main/index.js"
-				},
-				"import": {
-					"types": "./esm/main/index.d.ts",
-					"default": "./esm/main/index.js"
-				}
-			},
-			"./preload": {
-				"require": {
-					"types": "./preload/index.d.ts",
-					"default": "./preload/index.js"
-				},
-				"import": {
-					"types": "./esm/preload/index.d.ts",
-					"default": "./esm/preload/index.js"
-				}
-			},
-		},
-		dependencies,
+		author: packageJson.author,
+		description: packageJson.description,
+		license: packageJson.license,
+		keywords: packageJson.keywords,
+		homepage: packageJson.homepage,
+		repository: packageJson.repository,
+		exports: packageJson.exports,
+		module: packageJson.module,
+		browser: packageJson.browser,
+		dependencies: packageJson.dependencies,
 	});
 
-	const packageJson = packageMetadata(getArgs().version, JSON.parse(readFileSync(join(getArgs().root, 'package.json'))).dependencies);
+	const prepearedPackageJson = packageMetadata(getArgs().version);
 
-	writeFileSync(join(getArgs().output, 'package.json'), JSON.stringify(packageJson, null, '\t'));
+	writeFileSync(join(getArgs().output, 'package.json'), JSON.stringify(prepearedPackageJson, null, '\t'));
 }
 
 function main() {
