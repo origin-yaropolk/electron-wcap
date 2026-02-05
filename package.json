@@ -15,7 +15,8 @@
 		"lint:ec": "ec",
 		"lint:eslint": "eslint --ext .ts,.tsx ./src/",
 		"build": "rollup --config rollup.config.mjs",
-		"test": "jest -c ./jest.config.json"
+		"test": "jest -c ./jest.config.json",
+		"test:integration": "pnpm build && electron ./dist/test/integration"
 	},
 	"volta": {
 		"node": "22.22.0",

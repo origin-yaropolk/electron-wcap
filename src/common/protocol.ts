@@ -11,6 +11,7 @@ export function isCallbackInvokeRequest(msg: unknown): msg is CallbackInvokeRequ
 	const mayBeRequest = msg as CallbackInvokeRequest;
 
 	return mayBeRequest !== null &&
+		typeof mayBeRequest === 'object' &&
 		typeof mayBeRequest.method === 'string' &&
 		Array.isArray(mayBeRequest.args);
 }

@@ -106,6 +106,10 @@ Output: `dist/` (CommonJS) and `dist/esm/` (ESM).
 
 - `pnpm build` — Rollup build (CJS + ESM)
 - `pnpm lint` — Lint (editorconfig + ESLint)
+- `pnpm test` — Unit tests (Jest)
+- `pnpm test:integration` — Integration tests with real Electron `BrowserWindow` (see note below)
+
+**Note on `test:integration`:** On Windows, a [known Electron bug](https://github.com/electron/electron/issues/49034) may cause the integration tests to fail. They should run correctly on macOS and Linux.
 
 ## License
 

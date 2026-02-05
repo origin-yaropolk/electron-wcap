@@ -22,12 +22,26 @@ const outputOptions = {
 
 // a simple plugin that adds a package.json file with type: module
 const modulePackageJson = {
-name: 'package-json-module-type',
+	name: 'package-json-module-type',
 	generateBundle() {
 		this.emitFile({
 			type: 'asset',
 			fileName: 'package.json',
 			source: '{"type": "module"}',
+		});
+	},
+};
+
+const integrationTestPackageJson = {
+	name: 'integration-test-package-json',
+	generateBundle() {
+		this.emitFile({
+			type: 'asset',
+			fileName: 'test/integration/package.json',
+			source: JSON.stringify({
+				name: 'electron-wcap-integration-test',
+				main: 'provider.integration.test.js'
+			}, null, 2),
 		});
 	},
 };
@@ -46,10 +60,11 @@ function transpileFiles(format, input, outDir) {
 			typescript({
 				tsconfig: './src/tsconfig.json',
 				noEmitOnError: true,
-				include: ['src/**/*.ts'],
+				include: ['src/**/*.ts', 'test/integration/**/*.ts'],
+				exclude: ['src/**/__tests__/**'],
 				compilerOptions: { outDir },
 			}),
-			format === 'esm' ? modulePackageJson : {},
+			format === 'esm' ? modulePackageJson : (format === 'cjs' ? integrationTestPackageJson : {}),
 		],
 		external,
 	};
@@ -59,6 +74,8 @@ const entryPoints = [
 	'src/index.ts',
 	'src/main/index.ts',
 	'src/preload/index.ts',
+	'test/integration/provider.integration.test.ts',
+	'test/integration/preload.ts',
 ];
 
 export default [

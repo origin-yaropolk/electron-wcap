@@ -1,7 +1,10 @@
 {
 	"preset": "ts-jest",
 	"testEnvironment": "node",
-	"testPathIgnorePatterns": ["node_modules", "dist"],
+	"roots": ["<rootDir>"],
+	"testMatch": ["**/*.test.ts"],
+	"modulePathIgnorePatterns": ["<rootDir>/dist"],
+	"testPathIgnorePatterns": ["node_modules", "dist", "test/integration"],
 	"transform": {
 		"^.+\\.ts$": [
 			"ts-jest", {

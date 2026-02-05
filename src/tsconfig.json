@@ -15,6 +15,7 @@
 		"moduleResolution": "bundler",
 		"types": [
 			"node",
+			"jest",
 		],
 		"lib": [
 			"dom",
@@ -22,9 +23,8 @@
 		],
 	},
 
-	"include": ["**/*.ts"],
+	"include": ["**/*.ts", "../test/**/*.ts"],
 	"exclude": [
 		"node_modules/**",
-		"test",
 	]
 }
