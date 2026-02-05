@@ -4,6 +4,7 @@ import { Promisify } from 'promisify-ts';
 import { DispatchedCallback } from '../common/protocol';
 import { CallbackRegistry, globalCallbacksRegistry } from './callback-registry';
 import { apiExists, invoke } from './injectable';
+import { apiKeyNotExists } from '../common/errors';
 
 export type WebContentsApiProvider<T> = Promisify<T> & { readonly webContents: WebContents };
 
@@ -57,7 +58,7 @@ class ApiProviderProxyHandler {
 		const propProxy = new Proxy(() => {}, {
 			async apply(_target: unknown, this_: ApiProviderPropertiesHandler, args: unknown[]): Promise<unknown> {
 				if (!(await apiExistsClosure)) {
-					throw new Error(`ApiProvider: Api with key '${ this_.apiKey }' does not exists in host with id '${ this_.webContents.id }'`);
+					throw apiKeyNotExists(this_.apiKey, this_.webContents.id);
 				}
 
 				const injectable = this_.compile(invoke, this_.apiKey, propertyKey, args);

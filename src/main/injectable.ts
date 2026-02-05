@@ -1,3 +1,4 @@
+import { bridgeNotRegistered } from '../common/errors';
 import { DispatchedCallback } from '../common/protocol';
 
 export function invoke(apiKey: string, method: string, args: unknown[]): unknown {
@@ -7,7 +8,7 @@ export function invoke(apiKey: string, method: string, args: unknown[]): unknown
 
 	function checkBridgeExists(): void {
 		if (window.__ElectronWCAPBridge__ === null || window.__ElectronWCAPBridge__ === undefined) {
-			throw new Error('ApiProvider: ApiProviderBridge does not exists. Make sure you have expose it via preload');
+			throw bridgeNotRegistered();
 		}
 	}
 

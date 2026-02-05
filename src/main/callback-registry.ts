@@ -1,6 +1,7 @@
 import { ipcMain, WebContents } from 'electron';
 
 import { BRIDGE_INVOKE_REQUEST_CHANNEL, isCallbackInvokeRequest } from '../common/protocol';
+import { callbackNotRegistered, callbackRegisteredAlready, callbackWithoutName, nonInvocationRequest } from '../common/errors';
 
 export class CallbackRegistry {
 	private readonly callbacks = new Map<number, Map<string, (...args: unknown[]) => unknown>>();
@@ -11,7 +12,7 @@ export class CallbackRegistry {
 				const callback = this.callbacks.get(event.sender.id)?.get(msg.method);
 
 				if (!callback) {
-					console.error(`CallbackRegistry: callback '${ msg.method }' is not registered in host '${ event.sender.id }'`);
+					console.error(callbackNotRegistered(msg.method, event.sender.id));
 					return;
 				}
 
@@ -19,13 +20,13 @@ export class CallbackRegistry {
 				return;
 			}
 
-			console.error('CallbackRegistry: got non callback invocation request');
+			console.error(nonInvocationRequest());
 		});
 	}
 
 	registerCallback(webContents: WebContents, callback: (...args: unknown[]) => unknown): string {
 		if (!callback.name) {
-			throw new Error('CallbackRegistry: callback must have a name. Use function decration syntax, if you didn\'t');
+			throw callbackWithoutName();
 		}
 
 		let callbacksByIdBucket = this.callbacks.get(webContents.id);
@@ -36,7 +37,7 @@ export class CallbackRegistry {
 		}
 
 		if (callbacksByIdBucket.has(callback.name)) {
-			throw new Error(`CallbackRegistry: callback with name '${ callback.name }', already registered in host with id '${ webContents.id }'`);
+			throw callbackRegisteredAlready(callback.name, webContents.id);
 		}
 
 		callbacksByIdBucket.set(callback.name, callback);
