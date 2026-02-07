@@ -75,6 +75,16 @@ importers:
         specifier: ^18.0.0
         version: 18.0.0
 
+  example:
+    dependencies:
+      electron-wcap:
+        specifier: ^1.0.0
+        version: 1.0.0
+    devDependencies:
+      electron:
+        specifier: ^40.1.0
+        version: 40.1.0
+
 packages:
 
   '@babel/code-frame@7.29.0':
@@ -1143,6 +1153,9 @@ packages:
 
   electron-to-chromium@1.5.283:
     resolution: {integrity: sha512-3vifjt1HgrGW/h76UEeny+adYApveS9dH2h3p57JYzBSXJIKUJAvtmIytDKjcSCt9xHfrNCFJ7gts6vkhuq++w==}
+
+  electron-wcap@1.0.0:
+    resolution: {integrity: sha512-kcfvSNQhmXBRUVzbbwINji6IvynioGJJekEpVYFGG9EuVHPj4LJ8tXObTjubUImDssQ6iWxzSOe7+ESBog1EQg==}
 
   electron@40.1.0:
     resolution: {integrity: sha512-2j/kvw7uF0H1PnzYBzw2k2Q6q16J8ToKrtQzZfsAoXbbMY0l5gQi2DLOauIZLzwp4O01n8Wt/74JhSRwG0yj9A==}
@@ -3816,6 +3829,8 @@ snapshots:
   editorconfig-checker@5.1.9: {}
 
   electron-to-chromium@1.5.283: {}
+
+  electron-wcap@1.0.0: {}
 
   electron@40.1.0:
     dependencies:

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Switcher Demo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-theme">
+  <div class="container">
+    <header>
+      <h1>Theme Switcher Demo</h1>
+      <button id="theme-toggle">Switch Theme</button>
+    </header>
+
+    <main>
+      <section class="controls">
+        <h2>Controls (Non-functional)</h2>
+        <div class="control-group">
+          <button class="btn">Button 1</button>
+          <button class="btn">Button 2</button>
+          <button class="btn disabled">Disabled</button>
+        </div>
+        
+        <div class="control-group">
+          <input type="text" placeholder="Text input">
+          <select>
+            <option>Option 1</option>
+            <option>Option 2</option>
+            <option>Option 3</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>
+            <input type="checkbox"> Checkbox
+          </label>
+          <label>
+            <input type="radio" name="group"> Radio 1
+          </label>
+          <label>
+            <input type="radio" name="group"> Radio 2
+          </label>
+        </div>
+      </section>
+
+      <section class="content">
+        <h2>Sample Content</h2>
+        <p>This is a paragraph with some <strong>bold text</strong> and <em>italic text</em>.</p>
+        <ul>
+          <li>List item 1</li>
+          <li>List item 2</li>
+          <li>List item 3</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      <p>Theme Switcher Demo &copy; 2024</p>
+    </footer>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

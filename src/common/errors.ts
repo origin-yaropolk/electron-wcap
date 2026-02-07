@@ -1,7 +1,3 @@
-export function unknownOptionsType(): Error {
-	return Error('EventsBatcher: unknown options type');
-}
-
 export function apiKeyNotExists(apiKey: string, webContentsId: number): Error {
 	return Error(`electron-wcap: api with key '${ apiKey }' does not exists in host with id '${ webContentsId }'`);
 }

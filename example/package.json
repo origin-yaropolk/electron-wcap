@@ -1,0 +1,17 @@
+{
+  "name": "theme-switcher",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+	"start": "electron dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "description": "",
+  "devDependencies": {
+    "electron": "^40.1.0"
+  },
+  "dependencies": {
+    "electron-wcap": "^1.0.0"
+  }
+}
