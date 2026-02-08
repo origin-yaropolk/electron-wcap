@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from "electron";
 
 import { join as pathJoin } from 'path';
-import { createApiProvider } from "electron-wcap/main";
+import { createApiProvider, dropCallbacks } from "electron-wcap/main";
 import { ThemeSwitcherApi } from "./public/theme-switcher-api";
 import { MenuItem } from "electron/main";
 
@@ -21,17 +21,20 @@ function makeAwaiter(): [Promise<void>, (value: void | PromiseLike<void>) => voi
 	throw Error('should not be executed');
 }
 
-function onThemeSwitched(oldTheme: 'dark' | 'light', newTheme: 'dark' | 'light'): void {
-		console.log(`Theme switched - was ${oldTheme}, now ${newTheme}`)
-	}
+function onThemeSwitchedCb(oldTheme: 'dark' | 'light', newTheme: 'dark' | 'light'): void {
+	console.log(`Theme switched - was ${oldTheme}, now ${newTheme}`)
+}
 
 async function startApp(): Promise<void> {
 	const window = await createWindow('../public/index.html');
 
 	const apiProvider = createApiProvider<ThemeSwitcherApi>(window.webContents, 'ThemeSwitcher');
 
-	// be careful, you should reset callback when window reloaded 
-	apiProvider.onThemeSwitched(onThemeSwitched)
+	apiProvider.onThemeSwitched(onThemeSwitchedCb);
+	window.webContents.on('dom-ready', () => {
+		dropCallbacks(apiProvider);
+		apiProvider.onThemeSwitched(onThemeSwitchedCb);
+	});
 
 	app.applicationMenu?.items[2].submenu?.append(new MenuItem({
 		label: 'Switch theme',
@@ -64,7 +67,7 @@ async function createWindow(filePath: string): Promise<BrowserWindow> {
 
 	mainWindow.webContents.on('dom-ready', () => {
 		domReadyResolver();
-	})
+	});
 
     await mainWindow.loadFile(filePath);
 

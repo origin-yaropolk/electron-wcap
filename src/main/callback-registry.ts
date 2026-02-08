@@ -4,7 +4,7 @@ import { BRIDGE_INVOKE_REQUEST_CHANNEL, isCallbackInvokeRequest } from '../commo
 import { callbackNotRegistered, callbackRegisteredAlready, callbackWithoutName, nonInvocationRequest } from '../common/errors';
 
 export class CallbackRegistry {
-	private readonly callbacks = new Map<number, Map<string, (...args: unknown[]) => unknown>>();
+	private readonly callbacks = new Map<number, Map<string, Function>>();
 
 	constructor() {
 		ipcMain.on(BRIDGE_INVOKE_REQUEST_CHANNEL, (event: Electron.IpcMainEvent, msg: unknown) => {
@@ -24,7 +24,7 @@ export class CallbackRegistry {
 		});
 	}
 
-	registerCallback(webContents: WebContents, callback: (...args: unknown[]) => unknown): string {
+	registerCallback(webContents: WebContents, callback: Function): string {
 		if (!callback.name) {
 			throw callbackWithoutName();
 		}
@@ -52,6 +52,10 @@ export class CallbackRegistry {
 		}
 
 		return callbacksByIdBucket.delete(name);
+	}
+
+	unregisterAll(hostId: number): boolean {
+		return this.callbacks.delete(hostId);
 	}
 
 	private watchForHost(webContents: WebContents): void {

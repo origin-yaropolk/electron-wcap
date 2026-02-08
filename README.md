@@ -18,6 +18,10 @@ npm add electron-wcap
 
 Requires **Electron** (peer dependency). Node 22+ and pnpm are recommended (see `volta` in `package.json`).
 
+## Example
+
+- See [Web Applciation with theme swticher API](example/)
+
 ## Usage
 
 ### 1. Main process
@@ -80,6 +84,10 @@ The renderer can call the callback (possibly asynchronously); the call is sent t
 	Returns a proxy that implements `ApiInterface` (and `Promisify<ApiInterface>` so methods are async). Each property access returns an async function that runs the corresponding method in the renderer via `webContents.executeJavaScript`.  
 	The proxy also has a readonly **`webContents`** property (the `WebContents` you passed in).
 
+- **`dropCallbacks(apiProvider)`**
+	Removes all registered callbacks associated with this API provider (i.e. webContents).
+	Returns **`true`** if at least one callback was removed.
+
 ### Preload (`electron-wcap/preload`)
 
 - **`enableCallbacks()`**  
@@ -89,7 +97,8 @@ The renderer can call the callback (possibly asynchronously); the call is sent t
 
 - **Entry points**: Use `electron-wcap/main` in the main process and `electron-wcap/preload` in the preload script. Importing from `electron-wcap` alone throws an error that explains this.
 - **Callback names**: Callbacks you pass from main must be named (e.g. `function onData(x) { ... }`), not anonymous, so they can be registered and invoked by name.
-- **sandbox**: as Electron now deafult sandbox to `true`, you should disable sandoxing to use callbacks.
+- **Sandbox**: as Electron now deafult sandbox to `true`, you should disable sandoxing to use callbacks.
+- **Reload webContents**: As the callback registry do not observes to webContents re/loading, you should manually drop and re-register callbacks after reloading or navigation.
 
 ## Build
 
