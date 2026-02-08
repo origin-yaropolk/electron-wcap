@@ -1,17 +1,17 @@
 import { WebContents } from 'electron';
 import { Promisify } from 'promisify-ts';
 
-import { CallbackRegistry, globalCallbacksRegistry } from './callback-registry';
-import { apiExists } from './injectable';
 import { apiKeyNotExists } from '../common/errors';
+import { CallbackRegistry, globalCallbacksRegistry } from './callback-registry';
 import { compile, compileInvoke } from './compiler';
+import { apiExists } from './injectable';
 
 export type WebContentsApiProvider<T> = Promisify<T> & { readonly webContents: WebContents };
 
 class ApiProviderPropertiesHandler {
 	constructor(
-		readonly webContents: WebContents, 
-		readonly apiKey: string, 
+		readonly webContents: WebContents,
+		readonly apiKey: string,
 		readonly callbackRegistry: CallbackRegistry
 	) {}
 }

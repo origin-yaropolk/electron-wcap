@@ -1,43 +1,43 @@
 class ThemeSwitcher {
-  constructor() {
-    this.currentTheme = 'light';
-    this.init();
-  }
-
-  init() {
-    const toggleBtn = document.getElementById('theme-toggle');
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', () => this.toggleTheme());
-    }
-    window.ThemeSwitcher = {
-		switchTheme: this.switchTheme.bind(this),
-		currentTheme: () => this.currentTheme,
-		onThemeSwitched: this.onThemeSwitched.bind(this),
+	constructor() {
+		this.currentTheme = 'light';
+		this.init();
 	}
-  }
 
-  toggleTheme() {
-    const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
-    this.switchTheme(newTheme);
-  }
+	init() {
+		const toggleBtn = document.getElementById('theme-toggle');
+		if (toggleBtn) {
+			toggleBtn.addEventListener('click', () => this.toggleTheme());
+		}
+		window.ThemeSwitcher = {
+			switchTheme: this.switchTheme.bind(this),
+			currentTheme: () => this.currentTheme,
+			onThemeSwitched: this.onThemeSwitched.bind(this),
+		}
+	}
 
-  switchTheme(theme) {
-	const oldTheme = this.currentTheme;
-    this.currentTheme = theme;
-    this.applyTheme();
+	toggleTheme() {
+		const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+		this.switchTheme(newTheme);
+	}
 
-	this.cb(oldTheme, this.currentTheme);
-  }
+	switchTheme(theme) {
+		const oldTheme = this.currentTheme;
+		this.currentTheme = theme;
+		this.applyTheme();
 
-  onThemeSwitched(cb) {
-	this.cb = cb;
-  }
+		this.cb(oldTheme, this.currentTheme);
+	}
 
-  applyTheme() {
-    document.body.className = `${this.currentTheme}-theme`;
-  }
+	onThemeSwitched(cb) {
+		this.cb = cb;
+	}
+
+	applyTheme() {
+		document.body.className = `${this.currentTheme}-theme`;
+	}
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  new ThemeSwitcher();
+	new ThemeSwitcher();
 });

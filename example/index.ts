@@ -53,15 +53,15 @@ async function startApp(): Promise<void> {
 async function createWindow(filePath: string): Promise<BrowserWindow> {
 	const preloadPath = pathJoin(app.getAppPath(), 'preload.js');
 
-    const mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        webPreferences: {
-            sandbox: false,
+	const mainWindow = new BrowserWindow({
+		width: 800,
+		height: 600,
+		webPreferences: {
+			sandbox: false,
 			preload: preloadPath,
-            devTools: true,
-        },
-    });
+			devTools: true,
+		},
+	});
 
 	const [domReady, domReadyResolver] = makeAwaiter()
 
@@ -69,19 +69,19 @@ async function createWindow(filePath: string): Promise<BrowserWindow> {
 		domReadyResolver();
 	});
 
-    await mainWindow.loadFile(filePath);
+	await mainWindow.loadFile(filePath);
 
 	await domReady;
 
-    return mainWindow;
+	return mainWindow;
 }
 
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit();
+	if (process.platform !== 'darwin') app.quit();
 })
 
 app.on('ready', () => {
-    setTimeout(async () => {
-        startApp();
-    }, 1000);
+	setTimeout(async () => {
+		startApp();
+	}, 1000);
 })

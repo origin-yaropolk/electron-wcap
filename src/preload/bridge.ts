@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-import { BRIDGE_INVOKE_REQUEST_CHANNEL, CallbackInvokeRequest, CALLBACK_BRIDGE_NAME } from '../common/protocol';
+import { BRIDGE_INVOKE_REQUEST_CHANNEL, CALLBACK_BRIDGE_NAME, CallbackInvokeRequest } from '../common/protocol';
 
 export function enableCallbacks(): void {
 	contextBridge.exposeInMainWorld(CALLBACK_BRIDGE_NAME, {

@@ -1,4 +1,4 @@
-import { exportFromRoot } from "./common/errors";
+import { exportFromRoot } from './common/errors';
 
 throw exportFromRoot();
 

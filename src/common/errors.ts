@@ -7,7 +7,7 @@ export function callbackNotRegistered(method: string, senderId: number): Error {
 }
 
 export function nonInvocationRequest(): Error {
-	return Error('electron-wcap: got non callback invocation request')
+	return Error('electron-wcap: got non callback invocation request');
 }
 
 export function callbackWithoutName(): Error {
