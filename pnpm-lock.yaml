@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      promisify-ts:
+        specifier: ^1.0.1
+        version: 1.0.1
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.3
@@ -56,9 +60,6 @@ importers:
       jest:
         specifier: ^30.2.0
         version: 30.2.0(@types/node@25.1.0)
-      promisify-ts:
-        specifier: ^1.0.1
-        version: 1.0.1
       rollup:
         specifier: ^4.57.1
         version: 4.57.1
@@ -78,8 +79,8 @@ importers:
   example:
     dependencies:
       electron-wcap:
-        specifier: file:C:/Users/ekush/Documents/dev/webcontents-api-provider/dist/electron-wcap-0.0.3.tgz
-        version: file:dist/electron-wcap-0.0.3.tgz
+        specifier: ^1.0.0
+        version: 1.0.0
     devDependencies:
       electron:
         specifier: ^40.1.0
@@ -1175,9 +1176,8 @@ packages:
   electron-to-chromium@1.5.283:
     resolution: {integrity: sha512-3vifjt1HgrGW/h76UEeny+adYApveS9dH2h3p57JYzBSXJIKUJAvtmIytDKjcSCt9xHfrNCFJ7gts6vkhuq++w==}
 
-  electron-wcap@file:dist/electron-wcap-0.0.3.tgz:
-    resolution: {integrity: sha512-Lb4GMBIfI4zAHMruLJ8IiCDO1xli4oSE4IOxwT79U2YcOJPL11HWtfBjWEM6Qn4WxaR0k+4+184h3q2hZCWWrA==, tarball: file:dist/electron-wcap-0.0.3.tgz}
-    version: 0.0.3
+  electron-wcap@1.0.0:
+    resolution: {integrity: sha512-kcfvSNQhmXBRUVzbbwINji6IvynioGJJekEpVYFGG9EuVHPj4LJ8tXObTjubUImDssQ6iWxzSOe7+ESBog1EQg==}
 
   electron@40.1.0:
     resolution: {integrity: sha512-2j/kvw7uF0H1PnzYBzw2k2Q6q16J8ToKrtQzZfsAoXbbMY0l5gQi2DLOauIZLzwp4O01n8Wt/74JhSRwG0yj9A==}
@@ -3852,7 +3852,7 @@ snapshots:
 
   electron-to-chromium@1.5.283: {}
 
-  electron-wcap@file:dist/electron-wcap-0.0.3.tgz: {}
+  electron-wcap@1.0.0: {}
 
   electron@40.1.0:
     dependencies:
