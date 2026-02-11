@@ -1,7 +1,7 @@
 import { ipcMain, WebContents } from 'electron';
 
-import { callbackNotRegistered, callbackRegisteredAlready, callbackWithoutName, nonInvocationRequest } from '../common/errors';
-import { BRIDGE_INVOKE_REQUEST_CHANNEL, isCallbackInvokeRequest } from '../common/protocol';
+import { BRIDGE_INVOKE_REQUEST_CHANNEL, BRIDGE_DELETE_REQUEST_CHANNEL, isCallbackInvokeRequest, isCallbackDeleteRequest } from '../common/protocol';
+import { callbackNotRegistered, callbackRegisteredAlready, callbackWithoutName, nonDeletionRequest, nonInvocationRequest } from '../common/errors';
 
 export class CallbackRegistry {
 	private readonly callbacks = new Map<number, Map<string, (..._: unknown[]) => unknown>>();
@@ -21,6 +21,15 @@ export class CallbackRegistry {
 			}
 
 			console.error(nonInvocationRequest());
+		});
+
+		ipcMain.on(BRIDGE_DELETE_REQUEST_CHANNEL, (event: Electron.IpcMainEvent, msg: unknown) => {
+			if (isCallbackDeleteRequest(msg)) {
+				this.unregisterCallback(event.sender.id, msg.method);
+				return;
+			}
+
+			console.log(nonDeletionRequest());
 		});
 	}
 

@@ -17,9 +17,20 @@ export function invoke(apiKey: string, method: string, args: unknown[]): unknown
 			checkBridgeExists();
 
 			const name = arg.dispatchedCallbackName;
-			args[index] = (...cbArgs: unknown[]) => {
+
+			const cb = (...cbArgs: unknown[]) => {
 				return window.__ElectronWCAPBridge__.invoke(name, cbArgs);
 			};
+
+			if (!window.finalizator) {
+				window.finalizator = new FinalizationRegistry((name: string) => {
+					window.__ElectronWCAPBridge__.deleteCb(name);
+				});
+			}
+
+			window.finalizator.register(cb, name);
+
+			args[index] = cb;
 		}
 	}
 

@@ -9,11 +9,31 @@ import { apiExists } from './injectable';
 export type WebContentsApiProvider<T> = Promisify<T> & { readonly webContents: WebContents };
 
 class ApiProviderPropertiesHandler {
-	constructor(
-		readonly webContents: WebContents,
-		readonly apiKey: string,
-		readonly callbackRegistry: CallbackRegistry
-	) {}
+	constructor(readonly webContents: WebContents, readonly apiKey: string, private readonly callbackRegistry: CallbackRegistry) {}
+
+	compile<P extends unknown[]>(fn: (...args: P) => unknown, ...args: P): string {
+		return `(${ fn.toString() })(${ this.serializeArguments(...args) })`;
+	};
+
+	serializeArguments(...args: unknown[]): string {
+		const serialized = args.map((arg: unknown): string => {
+			if (Array.isArray(arg)) {
+				arg.forEach((value: unknown[], index) => {
+					if (typeof value === 'function') {
+						const dispatched: DispatchedCallback = {
+							dispatchedCallbackName: this.callbackRegistry.registerCallback(this.webContents, value),
+						};
+
+						arg[index] = dispatched;
+					}
+				});
+			}
+
+			return JSON.stringify(arg);
+		});
+
+		return serialized.join(',');
+	}
 }
 
 class ApiProviderProxyHandler {
@@ -41,9 +61,9 @@ class ApiProviderProxyHandler {
 					throw apiKeyNotExists(this_.apiKey, this_.webContents.id);
 				}
 
-				const injectable = compileInvoke(globalCallbacksRegistry(), this_.webContents, this_.apiKey, propertyKey, args);
-
-				return this_.webContents.executeJavaScript(injectable);
+				const injectable = this_.compile(invoke, this_.apiKey, propertyKey, args);
+				return this_.webContents.executeJavaScriptInIsolatedWorld(0,[{code: injectable}]);
+				// return this_.webContents.executeJavaScript(injectable);
 			},
 		});
 
