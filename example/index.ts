@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from "electron";
 
 import { join as pathJoin } from 'path';
-import { createApiProvider, dropCallbacks } from "electron-wcap/main";
+import { createApiProvider } from "electron-wcap/main";
 import { ThemeSwitcherApi } from "./public/theme-switcher-api";
 import { MenuItem } from "electron/main";
 
@@ -31,10 +31,6 @@ async function startApp(): Promise<void> {
 	const apiProvider = createApiProvider<ThemeSwitcherApi>(window.webContents, 'ThemeSwitcher');
 
 	apiProvider.onThemeSwitched(onThemeSwitchedCb);
-	window.webContents.on('dom-ready', () => {
-		dropCallbacks(apiProvider);
-		apiProvider.onThemeSwitched(onThemeSwitchedCb);
-	});
 
 	app.applicationMenu?.items[2].submenu?.append(new MenuItem({
 		label: 'Switch theme',
