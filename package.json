@@ -20,6 +20,7 @@
 		"lint": "pnpm lint:ec && pnpm lint:eslint",
 		"lint:ec": "ec",
 		"lint:eslint": "eslint --ext .ts,.tsx ./src/",
+		"lint:test": "eslint --ext .ts ./test/",
 		"build": "rollup --config rollup.config.mjs",
 		"test": "jest -c ./jest.config.json"
 	},

@@ -19,3 +19,5 @@ jobs:
       uses: volta-cli/action@v4
     - run: pnpm install
     - run: pnpm lint
+    - run: pnpm lint:test
+    - run: pnpm test

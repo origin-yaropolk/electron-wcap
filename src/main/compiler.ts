@@ -8,11 +8,11 @@ export function compileInvoke<P extends unknown[]>(
 	apiKey: string,
 	method: string,
 	args: P): string {
-	return `(${ invoke.toString() })('${ apiKey }','${ method }',[${ serializeArguments(registry, webContents, args) }])`;
+	return `(${ invoke.toString() })("${ apiKey }","${ method }",[${ serializeArguments(registry, webContents, args) }])`;
 };
 
 export function compile<P extends unknown[]>(fn: (..._: P) => unknown, ...args: P): string {
-	return `(${ fn.toString() })([${ serializeArgumentsRaw(args) }])`;
+	return `(${ fn.toString() })(${ serializeArgumentsRaw(args) })`;
 }
 
 function serializeArguments(registry: CallbackRegistry, webContents: Electron.WebContents, args: unknown[]): string {

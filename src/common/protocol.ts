@@ -8,11 +8,12 @@ export interface DispatchedCallback {
 }
 
 export function isCallbackInvokeRequest(msg: unknown): msg is CallbackInvokeRequest {
-	const mayBeRequest = msg as CallbackInvokeRequest;
-
-	return mayBeRequest !== null &&
-		typeof mayBeRequest.method === 'string' &&
-		Array.isArray(mayBeRequest.args);
+	return msg !== null &&
+		typeof msg === 'object' &&
+		'method' in msg &&
+		typeof msg.method === 'string' &&
+		'args' in msg &&
+		Array.isArray(msg.args);
 }
 
 export const BRIDGE_INVOKE_REQUEST_CHANNEL = 'api-provider:bridge-request';
