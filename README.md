@@ -100,23 +100,10 @@ The renderer can call the callback (possibly asynchronously); the call is sent t
 - **Sandbox**: as Electron now deafult sandbox to `true`, you should disable sandoxing to use callbacks.
 - **Reload webContents**: As the callback registry do not observes to webContents re/loading, you should manually drop and re-register callbacks after reloading or navigation.
 
-## Build
+## Develop
 
-From the repo:
+See [DEVELOP.md](./doc/DEVELOP.md).
 
-```bash
-pnpm i
-pnpm build
-```
-
-Output: `dist/` (CommonJS) and `dist/esm/` (ESM).
-
-## Scripts
-
-- `pnpm build` — Rollup build (CJS + ESM)
-- `pnpm lint` — Lint (editorconfig + ESLint)
-- `pnpm lint:test` — Lint tests (editorconfig + ESLint)
-- `pnpm test` — Unit tests (Jest)
 
 ## License
 
