@@ -26,7 +26,7 @@ function onThemeSwitchedCb(oldTheme: 'dark' | 'light', newTheme: 'dark' | 'light
 }
 
 async function startApp(): Promise<void> {
-	const window = await createWindow('../public/index.html');
+	const window = await createWindow('http://localhost:8080/');
 
 	const apiProvider = createApiProvider<ThemeSwitcherApi>(window.webContents, 'ThemeSwitcher');
 
@@ -46,7 +46,7 @@ async function startApp(): Promise<void> {
 	}))
 }
 
-async function createWindow(filePath: string): Promise<BrowserWindow> {
+async function createWindow(url: string): Promise<BrowserWindow> {
 	const preloadPath = pathJoin(app.getAppPath(), 'preload.js');
 
 	const mainWindow = new BrowserWindow({
@@ -65,7 +65,7 @@ async function createWindow(filePath: string): Promise<BrowserWindow> {
 		domReadyResolver();
 	});
 
-	await mainWindow.loadFile(filePath);
+	await mainWindow.loadURL(url);
 
 	await domReady;
 

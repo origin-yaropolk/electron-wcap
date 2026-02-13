@@ -3,13 +3,17 @@
 	"version": "1.0.0",
 	"scripts": {
 		"build": "tsc",
-		"start": "electron dist/index.js"
+		"start-server": "http-server public --port 8080",
+		"start-electron": "electron dist/index.js",
+		"start": "concurrently \"pnpm start-server\" \"pnpm start-electron\""
 	},
 	"keywords": [],
 	"author": "",
 	"description": "",
 	"devDependencies": {
-		"electron": "^40.1.0"
+		"concurrently": "^9.2.1",
+		"electron": "^40.1.0",
+		"http-server": "^14.1.1"
 	},
 	"volta": {
 		"node": "22.22.0",
