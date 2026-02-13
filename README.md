@@ -115,6 +115,7 @@ Output: `dist/` (CommonJS) and `dist/esm/` (ESM).
 
 - `pnpm build` — Rollup build (CJS + ESM)
 - `pnpm lint` — Lint (editorconfig + ESLint)
+- `pnpm lint:test` — Lint tests (editorconfig + ESLint)
 - `pnpm test` — Unit tests (Jest)
 
 ## License

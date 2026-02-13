@@ -64,6 +64,10 @@ export function createApiProvider<ApiInterface>(webContents: WebContents, apiKey
 	return new Proxy(propertiesHandler, proxyHandler) as WebContentsApiProvider<ApiInterface>;
 }
 
-export function dropCallbacks<T>(apiProvider: WebContentsApiProvider<T>): boolean {
+export function removeAllCallbacks<T>(apiProvider: WebContentsApiProvider<T>): boolean {
 	return globalCallbacksRegistry().unregisterAll(apiProvider.webContents.id);
+}
+
+export function removeCallback<T>(apiProvider: WebContentsApiProvider<T>, name: string): boolean {
+	return globalCallbacksRegistry().unregisterCallback(apiProvider.webContents.id, name);
 }
