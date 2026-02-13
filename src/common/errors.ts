@@ -10,6 +10,10 @@ export function nonInvocationRequest(): Error {
 	return Error('electron-wcap: got non callback invocation request');
 }
 
+export function nonRemoveRequest(): Error {
+	return Error('electron-wcap: got non callback remove request');
+}
+
 export function callbackWithoutName(): Error {
 	return Error('electron-wcap: callback must have a name - use function decration syntax');
 }

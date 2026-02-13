@@ -1,13 +1,16 @@
-import { callbackNotRegistered, callbackRegisteredAlready, callbackWithoutName, nonInvocationRequest } from '../src/common/errors';
+import { callbackNotRegistered, callbackRegisteredAlready, callbackWithoutName, nonInvocationRequest, nonRemoveRequest } from '../src/common/errors';
+import { BRIDGE_INVOKE_REQUEST_CHANNEL, BRIDGE_REMOVE_REQUEST_CHANNEL } from '../src/common/protocol';
 import { CallbackRegistry } from '../src/main/callback-registry';
 
-const ipcHandlers: { handler?(event: Electron.IpcMainEvent, msg: unknown): void } = {};
+const ipcHandlers: { handlers: Map<string, (event: Electron.IpcMainEvent, msg: unknown) => void> } = {
+	handlers: new Map()
+};
 const destroyHandlers = new Map<number, (event: unknown) => void>();
 
 jest.mock('electron', () => ({
 	ipcMain: {
-		on: jest.fn((_channel: string, handler: (event: Electron.IpcMainEvent, msg: unknown) => void) => {
-			ipcHandlers.handler = handler;
+		on: jest.fn((channel: string, handler: (event: Electron.IpcMainEvent, msg: unknown) => void) => {
+			ipcHandlers.handlers.set(channel, handler);
 		})
 	}
 }));
@@ -27,8 +30,8 @@ export function createMockEvent(senderId: number): Electron.IpcMainEvent {
 	} as unknown as Electron.IpcMainEvent;
 }
 
-export function simulateIpcMessage(event: Electron.IpcMainEvent, msg: unknown): void {
-	ipcHandlers.handler?.(event, msg);
+export function simulateIpcMessage(channel: string, event: Electron.IpcMainEvent, msg: unknown): void {
+	ipcHandlers.handlers.get(channel)?.(event, msg);
 }
 
 describe('CallbackRegistry', () => {
@@ -62,7 +65,7 @@ describe('CallbackRegistry', () => {
 			const event = createMockEvent(999);
 			const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
 
-			simulateIpcMessage(event, 'non invocation request');
+			simulateIpcMessage(BRIDGE_INVOKE_REQUEST_CHANNEL, event, 'non invocation request');
 
 			expect(consoleSpy).toHaveBeenCalledWith(nonInvocationRequest());
 			consoleSpy.mockRestore();
@@ -126,7 +129,7 @@ describe('CallbackRegistry', () => {
 			registry.registerCallback(webContents, myCb as (..._: unknown[]) => unknown);
 
 			const event = createMockEvent(1);
-			simulateIpcMessage(event, { method: 'myCb', args: [1, 2] });
+			simulateIpcMessage(BRIDGE_INVOKE_REQUEST_CHANNEL, event, { method: 'myCb', args: [1, 2] });
 
 			// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 			expect(event.returnValue).toBe(3);
@@ -137,9 +140,37 @@ describe('CallbackRegistry', () => {
 			const event = createMockEvent(999);
 			const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
 
-			simulateIpcMessage(event, { method: 'nonexistent', args: [] });
+			simulateIpcMessage(BRIDGE_INVOKE_REQUEST_CHANNEL, event, { method: 'nonexistent', args: [] });
 
 			expect(consoleSpy).toHaveBeenCalledWith(callbackNotRegistered('nonexistent', event.sender.id));
+			consoleSpy.mockRestore();
+		});
+
+		it('removes registered callback when receiving valid request', () => {
+			function myCallback(): void {}
+			const webContents = createMockWebContents();
+			registry.registerCallback(webContents, myCallback);
+
+			const event = createMockEvent(1);
+			simulateIpcMessage(BRIDGE_REMOVE_REQUEST_CHANNEL, event, { method: 'myCallback' });
+
+			expect(event.returnValue).toBeTruthy();
+
+			simulateIpcMessage(BRIDGE_REMOVE_REQUEST_CHANNEL, event, { method: 'myCallback' });
+
+			expect(event.returnValue).toBeFalsy();
+		});
+
+		it('error for non remove request', () => {
+			function myCallback(): void {}
+			const webContents = createMockWebContents();
+			registry.registerCallback(webContents, myCallback);
+
+			const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+			const event = createMockEvent(1);
+			simulateIpcMessage(BRIDGE_REMOVE_REQUEST_CHANNEL, event, 'myCb');
+
+			expect(consoleSpy).toHaveBeenCalledWith(nonRemoveRequest());
 			consoleSpy.mockRestore();
 		});
 	});
@@ -151,7 +182,7 @@ describe('CallbackRegistry', () => {
 			registry.registerCallback(webContents, myCb as (..._: unknown[]) => unknown);
 
 			const event = createMockEvent(1);
-			simulateIpcMessage(event, { method: 'myCb', args: [1, 2] });
+			simulateIpcMessage(BRIDGE_INVOKE_REQUEST_CHANNEL, event, { method: 'myCb', args: [1, 2] });
 
 			// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 			expect(event.returnValue).toBe(3);
@@ -161,7 +192,7 @@ describe('CallbackRegistry', () => {
 			const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
 
 			// eslint-disable-next-line @typescript-eslint/no-magic-numbers
-			simulateIpcMessage(event, { method: 'myCb', args: [2, 3] });
+			simulateIpcMessage(BRIDGE_INVOKE_REQUEST_CHANNEL, event, { method: 'myCb', args: [2, 3] });
 
 			expect(consoleSpy).toHaveBeenCalledWith(callbackNotRegistered('myCb', event.sender.id));
 			consoleSpy.mockRestore();

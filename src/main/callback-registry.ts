@@ -1,26 +1,35 @@
 import { ipcMain, WebContents } from 'electron';
 
-import { callbackNotRegistered, callbackRegisteredAlready, callbackWithoutName, nonInvocationRequest } from '../common/errors';
-import { BRIDGE_INVOKE_REQUEST_CHANNEL, isCallbackInvokeRequest } from '../common/protocol';
+import { callbackNotRegistered, callbackRegisteredAlready, callbackWithoutName, nonInvocationRequest, nonRemoveRequest } from '../common/errors';
+import { BRIDGE_INVOKE_REQUEST_CHANNEL, BRIDGE_REMOVE_REQUEST_CHANNEL, isCallbackInvokeRequest, isCallbackRemoveRequest } from '../common/protocol';
 
 export class CallbackRegistry {
 	private readonly callbacks = new Map<number, Map<string, (...args: unknown[]) => unknown>>();
 
 	constructor() {
 		ipcMain.on(BRIDGE_INVOKE_REQUEST_CHANNEL, (event: Electron.IpcMainEvent, msg: unknown) => {
-			if (isCallbackInvokeRequest(msg)) {
-				const callback = this.callbacks.get(event.sender.id)?.get(msg.method);
-
-				if (!callback) {
-					console.error(callbackNotRegistered(msg.method, event.sender.id));
-					return;
-				}
-
-				event.returnValue = callback(...msg.args);
+			if (!isCallbackInvokeRequest(msg)) {
+				console.error(nonInvocationRequest());
 				return;
 			}
 
-			console.error(nonInvocationRequest());
+			const callback = this.callbacks.get(event.sender.id)?.get(msg.method);
+
+			if (!callback) {
+				console.error(callbackNotRegistered(msg.method, event.sender.id));
+				return;
+			}
+
+			event.returnValue = callback(...msg.args);
+		});
+
+		ipcMain.on(BRIDGE_REMOVE_REQUEST_CHANNEL, (event: Electron.IpcMainEvent, msg: unknown) => {
+			if (!isCallbackRemoveRequest(msg)) {
+				console.error(nonRemoveRequest());
+				return;
+			}
+
+			event.returnValue = this.unregisterCallback(event.sender.id, msg.method);
 		});
 	}
 

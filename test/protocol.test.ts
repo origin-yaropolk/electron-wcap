@@ -1,4 +1,4 @@
-import { isCallbackInvokeRequest } from '../src/common/protocol';
+import { isCallbackInvokeRequest, isCallbackRemoveRequest } from '../src/common/protocol';
 
 describe('isCallbackInvokeRequest', () => {
 	it('returns true for valid CallbackInvokeRequest', () => {
@@ -27,5 +27,29 @@ describe('isCallbackInvokeRequest', () => {
 		expect(isCallbackInvokeRequest('string')).toBe(false);
 		// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 		expect(isCallbackInvokeRequest(42)).toBe(false);
+	});
+});
+
+describe('isCallbackRemoveRequest', () => {
+	it('returns true for valid isCallbackRemoveRequest', () => {
+		expect(isCallbackRemoveRequest({ method: 'myCallback' })).toBe(true);
+		expect(isCallbackRemoveRequest({ method: 'cb' })).toBe(true);
+	});
+
+	it('returns false for null', () => {
+		expect(isCallbackRemoveRequest(null)).toBe(false);
+	});
+
+	it('returns false when method is not a string', () => {
+		expect(isCallbackRemoveRequest({ method: 123, args: [] })).toBe(false);
+		expect(isCallbackRemoveRequest({ method: undefined, args: [] })).toBe(false);
+		expect(isCallbackRemoveRequest({ args: [] })).toBe(false);
+	});
+
+	it('returns false for non-object types', () => {
+		expect(isCallbackRemoveRequest(undefined)).toBe(false);
+		expect(isCallbackRemoveRequest('string')).toBe(false);
+		// eslint-disable-next-line @typescript-eslint/no-magic-numbers
+		expect(isCallbackRemoveRequest(42)).toBe(false);
 	});
 });
