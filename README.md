@@ -84,9 +84,13 @@ The renderer can call the callback (possibly asynchronously); the call is sent t
 	Returns a proxy that implements `ApiInterface` (and `Promisify<ApiInterface>` so methods are async). Each property access returns an async function that runs the corresponding method in the renderer via `webContents.executeJavaScript`.  
 	The proxy also has a readonly **`webContents`** property (the `WebContents` you passed in).
 
-- **`dropCallbacks(apiProvider)`**
+- **`removeAllCallbacks(apiProvider)`**
 	Removes all registered callbacks associated with this API provider (i.e. webContents).
 	Returns **`true`** if at least one callback was removed.
+
+- **`removeCallback(apiProvider, name)`**
+	Removes registered callbacks associated with this API provider (i.e. webContents) and name.
+	Returns **`true`** if callback was removed.
 
 ### Preload (`electron-wcap/preload`)
 
