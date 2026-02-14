@@ -1,6 +1,6 @@
-import { callbackNotRegistered, callbackRegisteredAlready, callbackWithoutName, nonInvocationRequest, nonRemoveRequest } from '../src/common/errors';
-import { BRIDGE_INVOKE_REQUEST_CHANNEL, BRIDGE_REMOVE_REQUEST_CHANNEL } from '../src/common/protocol';
-import { CallbackRegistry } from '../src/main/callback-registry';
+import { callbackNotRegistered, callbackRegisteredAlready, callbackWithoutName, nonInvocationRequest, nonRemoveRequest } from '../../src/common/errors';
+import { BRIDGE_INVOKE_REQUEST_CHANNEL, BRIDGE_REMOVE_REQUEST_CHANNEL } from '../../src/common/protocol';
+import { CallbackRegistry } from '../../src/main/callback-registry';
 
 const ipcHandlers: { handlers: Map<string, (event: Electron.IpcMainEvent, msg: unknown) => void> } = {
 	handlers: new Map()
