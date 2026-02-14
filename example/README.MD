@@ -6,6 +6,6 @@ Demo app that demonstrated typical case of web application designed to be embedd
 
 ## Scripts
 
-- `pnpm build` — Rollup build (CJS + ESM)
+- `pnpm build` — Build application.
 	Output: `dist/`.
 - `pnpm start` — Starts the app.
