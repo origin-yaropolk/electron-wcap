@@ -22,7 +22,8 @@
 		"lint:eslint": "eslint --ext .ts,.tsx ./src/",
 		"lint:test": "eslint --ext .ts ./test/",
 		"build": "rollup --config rollup.config.mjs",
-		"test": "jest -c ./jest.config.json"
+		"test": "jest -c ./jest.config.json",
+		"test:int": "vitest run --root=./test/integration --silent=false --disable-console-intercept"
 	},
 	"volta": {
 		"node": "22.22.0",
@@ -77,12 +78,15 @@
 		"koa-bodyparser": "^4.3.0",
 		"koa-tree-router": "^0.12.1",
 		"rollup": "^4.57.1",
+		"semver": "^7.7.4",
 		"ts-jest": "^29.4.6",
 		"tslib": "^2.8.1",
 		"typescript": "^5.9.3",
+		"vitest": "^4.0.18",
 		"yargs": "^18.0.0"
 	},
 	"dependencies": {
+		"@types/semver": "^7.7.1",
 		"promisify-ts": "^1.0.1"
 	}
 }

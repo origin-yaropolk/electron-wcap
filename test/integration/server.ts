@@ -28,7 +28,7 @@ async function getRequestBody(ctx: ParameterizedContext): Promise<Buffer> {
 
 function parseTestData(data: Buffer): TestData {
 	return {
-		payload: [data],
+		payload: data.toString(),
 	};
 }
 
@@ -72,7 +72,7 @@ export function createTestServer(
 		});
 	}
 
-	const server = app.listen(0);
+	const server = app.listen(8081);
 	const info = server.address();
 	if (!info || typeof info === 'string') {
 		throw new Error('Failed to get server address');

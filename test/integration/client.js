@@ -1,18 +1,12 @@
 import * as http from 'node:http';
 
-import { TestData } from './test-data';
-
-export interface TestClient {
-	post(data: TestData): Promise<void>
-}
-
-export function createTestClient(port: number): TestClient {
+export function createTestClient(port) {
 	return {
-		post(data: TestData): Promise<void> {
+		post(data) {
 			return new Promise((resolve, reject) => {
 				const body = JSON.stringify(data);
 
-				const options: http.RequestOptions = {
+				const options = {
 					hostname: 'localhost',
 					port,
 					path: '/test',
@@ -30,6 +24,8 @@ export function createTestClient(port: number): TestClient {
 
 					res.on('end', resolve);
 				});
+
+				req.write(JSON.stringify(data));
 
 				req.on('err', reject);
 				req.end();
