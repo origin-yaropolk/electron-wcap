@@ -4,7 +4,8 @@ import Router from 'koa-tree-router';
 import { Readable } from 'stream';
 import { gunzipSync } from 'zlib';
 
-import {TestLogger } from './utils';
+import { TestData } from './test-data';
+import { TestLogger } from './utils';
 
 function stream2buffer(stream: Readable): Promise<Buffer> {
 	return new Promise((resolve, reject) => {
@@ -29,10 +30,6 @@ function parseTestData(data: Buffer): TestData {
 	return {
 		payload: [data],
 	};
-}
-
-export interface TestData {
-	payload: unknown;
 }
 
 export interface TestServer {
