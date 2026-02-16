@@ -18,10 +18,7 @@ function getTestMeta(path: string) {
 
 type ExpectedTestData = TestData | ((event: TestData) => void);
 
-type Expected =
-  | {
-      testData: ExpectedTestData;
-    };
+type Expected = ExpectedTestData;
 
 
 type Version = { major: number; minor: number; patch: number; string: string };

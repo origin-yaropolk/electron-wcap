@@ -27,9 +27,7 @@ async function getRequestBody(ctx: ParameterizedContext): Promise<Buffer> {
 }
 
 function parseTestData(data: Buffer): TestData {
-	return {
-		payload: data.toString(),
-	};
+	return JSON.parse(data.toString());
 }
 
 export interface TestServer {

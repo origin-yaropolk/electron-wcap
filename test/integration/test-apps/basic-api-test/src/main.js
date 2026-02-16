@@ -19,5 +19,9 @@ app.on('ready', async() => {
 
   const testClient = createTestClient(8081);
 
+  console.log("BEFORE POST");
   await testClient.post(await apiProvider.add(4, 5));
+
+  console.log("EXIT");
+  app.exit();
 });

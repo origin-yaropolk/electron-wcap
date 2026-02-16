@@ -117,15 +117,37 @@ export class TestContext {
 
 		const isPromise = method() instanceof Promise;
 
+		let resolve: undefined | (() => void);
+		let reject: undefined | ((reason: unknown) => void);
+
+		const completePromise = new Promise<void>((res, rej) => {
+			resolve = res;
+			reject = rej;
+		});
+
+
+		while (true) {
+			if (method()) {
+				resolve?.();
+				break;
+			}
+			await sleep(100);
+		}
+
+		return completePromise;
+
 		let remaining = timeout;
 		while (isPromise ? !(await method()) : !method()) {
-			await new Promise<void>((resolve) => setTimeout(resolve, 100));
+			// await new Promise<void>((resolve) => setTimeout(resolve, 100));
+			await sleep(100);
 			remaining -= 100;
 			if (remaining < 0) {
 				const msg = message();
 				throw new Error(msg);
 			}
 		}
+
+		console.log('hui')
 	}
 
 	public async waitForAppClose(): Promise<void> {
@@ -175,19 +197,17 @@ export class ProcessStatus {
 		}
 	}
 
-	public async isRunning(): Promise<boolean> {
-		return new Promise<boolean>(() => {
-			try {
-				if (this.chProcess.pid) {
-					process.kill(this.chProcess.pid, 0);
-					return true;
-				}
+	public isRunning(): boolean {
+		try {
+			if (this.chProcess.pid) {
+				process.kill(this.chProcess.pid, 0);
+				return true;
 			}
-			catch (_e) {
-				//
-			}
+		}
+		catch (_e) {
+			//
+		}
 
-			return false;
-		});
+		return false;
 	}
 }

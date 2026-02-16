@@ -4,7 +4,7 @@ export function createTestClient(port) {
 	return {
 		post(data) {
 			return new Promise((resolve, reject) => {
-				const body = JSON.stringify(data);
+				const body = Buffer.from(JSON.stringify({payload: data}));
 
 				const options = {
 					hostname: 'localhost',
@@ -19,13 +19,20 @@ export function createTestClient(port) {
 					}
 				};
 
-				const req = http.request(options, (res) => {
-					res.setEncoding('utf8');
+				const req = http.request(options);
 
-					res.on('end', resolve);
+				req.on('response', (res) => {
+					res.on('data', (chunk) => {
+						console.log("GOT DATA", chunk.toString())
+					});
+
+					res.on('end', () => {
+						console.log("GOT RESPONSE")
+						resolve();
+					});
 				});
 
-				req.write(JSON.stringify(data));
+				req.write(body);
 
 				req.on('err', reject);
 				req.end();
