@@ -27,7 +27,7 @@ async function getRequestBody(ctx: ParameterizedContext): Promise<Buffer> {
 }
 
 function parseTestData(data: Buffer): TestData {
-	return JSON.parse(data.toString());
+	return JSON.parse(data.toString()) as TestData;
 }
 
 export interface TestServer {
@@ -36,6 +36,7 @@ export interface TestServer {
 }
 
 export function createTestServer(
+	port: number,
 	logger: TestLogger,
 	callback: (event: TestData) => void,
 ): TestServer {
@@ -70,16 +71,15 @@ export function createTestServer(
 		});
 	}
 
-	const server = app.listen(8081);
+	const server = app.listen(port);
 	const info = server.address();
 	if (!info || typeof info === 'string') {
 		throw new Error('Failed to get server address');
 	}
-	const port = info.port;
 
 	return {
 		get port(): number {
-			return port;
+			return info.port;
 		},
 		close(): Promise<void> {
 			return new Promise((resolve, reject) => {

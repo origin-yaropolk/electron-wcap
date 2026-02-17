@@ -19,8 +19,8 @@
 	"scripts": {
 		"lint": "pnpm lint:ec && pnpm lint:eslint",
 		"lint:ec": "ec",
-		"lint:eslint": "eslint --ext .ts,.tsx ./src/",
-		"lint:test": "eslint --ext .ts ./test/",
+		"lint:eslint": "eslint --ext .ts,.tsx ./src/ --parser-options={project:./src/tsconfig.json}",
+		"lint:test": "eslint --ext .ts ./test/ --parser-options={project:./test/tsconfig.json}",
 		"build": "rollup --config rollup.config.mjs",
 		"test": "jest -c ./jest.config.json",
 		"test:int": "vitest run --root=./test/integration --silent=false --disable-console-intercept"
@@ -58,6 +58,7 @@
 		"@eslint/eslintrc": "^3.3.3",
 		"@eslint/js": "^9.39.2",
 		"@rollup/plugin-typescript": "^12.3.0",
+		"@tsconfig/esm": "^1.0.5",
 		"@tsconfig/node22": "^22.0.5",
 		"@types/jest": "^30.0.0",
 		"@types/koa": "^2.0.52",
