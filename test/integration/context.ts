@@ -83,7 +83,7 @@ export class TestContext {
 		this.mainProcess = new ProcessStatus(childProcess);
 
 		await this.waitForTrue(
-			async() => (this.mainProcess ? this.mainProcess.isRunning() : false),
+			() => (this.mainProcess ? this.mainProcess.isRunning() : false),
 			() => 'Timeout: Waiting for app to start',
 		);
 
@@ -93,11 +93,11 @@ export class TestContext {
 	}
 
 	/** Stops the app and cleans up. */
-	public async stop(options: { retainData?: boolean } = {}): Promise<void> {
+	public stop(options: { retainData?: boolean } = {}): void {
 		const log = this.logger.createLogger('Test Context');
 		log('Stopping test app');
 
-		await this.mainProcess?.kill();
+		this.mainProcess?.kill();
 
 		if (!options.retainData) {
 			this.clearAppUserData();
@@ -119,7 +119,8 @@ export class TestContext {
 
 		let remaining = timeout;
 		while (isPromise ? !(await method()) : !method()) {
-			await new Promise<void>((resolve) => setTimeout(resolve, 100));
+			// await new Promise<void>((resolve) => setTimeout(resolve, 100));
+			await sleep(100);
 			remaining -= 100;
 			if (remaining < 0) {
 				const msg = message();
@@ -131,7 +132,7 @@ export class TestContext {
 	public async waitForAppClose(): Promise<void> {
 		const log = this.logger.createLogger('Test Context');
 		await this.waitForTrue(
-			async() => (this.mainProcess ? !(await this.mainProcess.isRunning()) : false),
+			() => (this.mainProcess ? !this.mainProcess.isRunning() : false),
 			() => 'Timeout: Waiting for app to die',
 		);
 
@@ -159,10 +160,10 @@ export class TestContext {
 export class ProcessStatus {
 	public constructor(private readonly chProcess: ChildProcess) {}
 
-	public async kill(): Promise<void> {
+	public kill(): void {
 		const pid = this.chProcess.pid;
 
-		if (await this.isRunning()) {
+		if (this.isRunning()) {
 			this.chProcess.kill();
 		}
 
@@ -175,19 +176,17 @@ export class ProcessStatus {
 		}
 	}
 
-	public async isRunning(): Promise<boolean> {
-		return new Promise<boolean>(() => {
-			try {
-				if (this.chProcess.pid) {
-					process.kill(this.chProcess.pid, 0);
-					return true;
-				}
+	public isRunning(): boolean {
+		try {
+			if (this.chProcess.pid) {
+				process.kill(this.chProcess.pid, 0);
+				return true;
 			}
-			catch (_e) {
-				//
-			}
+		}
+		catch (_e) {
+			//
+		}
 
-			return false;
-		});
+		return false;
 	}
 }

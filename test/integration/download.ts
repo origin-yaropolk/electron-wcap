@@ -1,5 +1,6 @@
 import { spawnSync } from 'child_process';
-import * as electronExtract from 'extract-zip';
+// eslint-disable-next-line import/no-named-default
+import { default as electronExtract } from 'extract-zip';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import { downloadArtifact as electronDownload } from '@electron/get';

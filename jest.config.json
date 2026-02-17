@@ -1,11 +1,11 @@
 {
 	"preset": "ts-jest",
 	"testEnvironment": "node",
-	"testPathIgnorePatterns": ["node_modules", "dist"],
+	"testPathIgnorePatterns": ["node_modules", "dist", "<rootDir>/test/integration/"],
 	"transform": {
 		"^.+\\.ts$": [
 			"ts-jest", {
-				"tsconfig": "./src/tsconfig.json"
+				"tsconfig": "./test/tsconfig.json"
 			}
 		]
 	}
