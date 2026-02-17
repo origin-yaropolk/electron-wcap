@@ -1,6 +1,6 @@
-import { globalCallbacksRegistry } from '../src/main/callback-registry';
-import { compile, compileInvoke } from '../src/main/compiler';
-import { invoke } from '../src/main/injectable';
+import { globalCallbacksRegistry } from '../../src/main/callback-registry';
+import { compile, compileInvoke } from '../../src/main/compiler';
+import { invoke } from '../../src/main/injectable';
 
 const ipcHandlers: { handler?(event: Electron.IpcMainEvent, msg: unknown): void } = {};
 

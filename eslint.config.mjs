@@ -28,6 +28,8 @@ export default defineConfig([{
 		"@typescript-eslint": typescriptEslint,
 		"simple-import-sort": simpleImportSort,
 	},
+	
+	ignores: ["test/**/*.{js,mjs,mts}", "**/dist/**"],
 
 	languageOptions: {
 		globals: {
@@ -41,9 +43,8 @@ export default defineConfig([{
 		sourceType: "module",
 
 		parserOptions: {
-			project: "./src/tsconfig.json",
+			project: "tsconfig.json",
 		},
-		
 	},
 
 	rules: {

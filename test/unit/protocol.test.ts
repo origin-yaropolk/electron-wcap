@@ -1,4 +1,4 @@
-import { isCallbackInvokeRequest, isCallbackRemoveRequest } from '../src/common/protocol';
+import { isCallbackInvokeRequest, isCallbackRemoveRequest } from '../../src/common/protocol';
 
 describe('isCallbackInvokeRequest', () => {
 	it('returns true for valid CallbackInvokeRequest', () => {

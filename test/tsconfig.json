@@ -1,6 +1,7 @@
 {
 	"extends": [
 		"@tsconfig/node22/tsconfig.json",
+		"@tsconfig/esm/tsconfig.json"
 	],
 	"compilerOptions": {
 		"declaration": true,
@@ -23,6 +24,5 @@
 		],
 	},
 
-	"include": ["**/*.ts"],
-	"exclude": ["node_modules/**"]
+	"include": ["**/*.ts"]
 }

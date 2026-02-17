@@ -19,10 +19,11 @@
 	"scripts": {
 		"lint": "pnpm lint:ec && pnpm lint:eslint",
 		"lint:ec": "ec",
-		"lint:eslint": "eslint --ext .ts,.tsx ./src/",
-		"lint:test": "eslint --ext .ts ./test/",
+		"lint:eslint": "eslint --ext .ts,.tsx ./src/ --parser-options={project:./src/tsconfig.json}",
+		"lint:test": "eslint --ext .ts ./test/ --parser-options={project:./test/tsconfig.json}",
 		"build": "rollup --config rollup.config.mjs",
-		"test": "jest -c ./jest.config.json"
+		"test": "jest -c ./jest.config.json",
+		"test:int": "xvfb-maybe vitest run --root=./test/integration --silent=false --disable-console-intercept"
 	},
 	"volta": {
 		"node": "22.22.0",
@@ -53,11 +54,15 @@
 		}
 	},
 	"devDependencies": {
+		"@electron/get": "^4.0.2",
 		"@eslint/eslintrc": "^3.3.3",
 		"@eslint/js": "^9.39.2",
 		"@rollup/plugin-typescript": "^12.3.0",
+		"@tsconfig/esm": "^1.0.5",
 		"@tsconfig/node22": "^22.0.5",
 		"@types/jest": "^30.0.0",
+		"@types/koa": "^2.0.52",
+		"@types/koa-bodyparser": "^4.3.13",
 		"@types/node": "^25.1.0",
 		"@typescript-eslint/eslint-plugin": "^8.54.0",
 		"@typescript-eslint/parser": "^8.54.0",
@@ -67,15 +72,23 @@
 		"eslint-config-standard": "^17.1.0",
 		"eslint-plugin-import": "^2.32.0",
 		"eslint-plugin-simple-import-sort": "^12.1.1",
+		"extract-zip": "^2.0.1",
 		"globals": "^17.3.0",
 		"jest": "^30.2.0",
+		"koa": "^3.0.1",
+		"koa-bodyparser": "^4.3.0",
+		"koa-tree-router": "^0.12.1",
 		"rollup": "^4.57.1",
+		"semver": "^7.7.4",
 		"ts-jest": "^29.4.6",
 		"tslib": "^2.8.1",
 		"typescript": "^5.9.3",
+		"vitest": "^4.0.18",
+		"xvfb-maybe": "^0.2.1",
 		"yargs": "^18.0.0"
 	},
 	"dependencies": {
+		"@types/semver": "^7.7.1",
 		"promisify-ts": "^1.0.1"
 	}
 }
