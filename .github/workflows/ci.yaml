@@ -10,10 +10,11 @@ on:
       - wcap-1-integration-tests-runner
 
 jobs:
-  lint:
+  lint-and-tests:
     runs-on: ubuntu-latest
     env:
       VOLTA_FEATURE_PNPM: 1
+      ELECTRON_VERSION: "40.1.0" 
     steps:
     - uses: actions/checkout@v6
     - name: Setup Volta and Node.js
@@ -22,3 +23,4 @@ jobs:
     - run: pnpm lint
     - run: pnpm lint:test
     - run: pnpm test
+    - run: pnpm test:int
